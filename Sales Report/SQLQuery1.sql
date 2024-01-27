@@ -83,7 +83,7 @@ rfm_calc as
 (SELECT rfm.*,
        NTILE(4) OVER(ORDER BY Recency desc) as rfm_Recency,
 	   NTILE(4) OVER(ORDER BY Frequency) as rfm_Frequency,
-	   NTILE(4) OVER(ORDER BY AvgMonetaryvalue) as rfm_AvgMonetaryvalue
+	   NTILE(4) OVER(ORDER BY Monetaryvalue) as rfm_Monetaryvalue
 FROM rfm
 )
 SELECT rfm_calc.*,rfm_Recency+rfm_Frequency+rfm_Frequency AS rfm_cell,
@@ -94,7 +94,7 @@ FROM rfm_calc
 SELECT CUSTOMERNAME, rfm_Recency, rfm_Frequency , rfm_Frequency,
 case 
 		when rfm_cell_string in (111, 112 , 121, 122, 123, 132, 211, 212, 114, 141) then 'lost_customers'  --lost customers
-		when rfm_cell_string in (133, 134, 143, 244, 334, 343, 344, 144) then 'slipping away, cannot lose' -- (Big spenders who haven’t purchased lately) slipping away
+		when rfm_cell_string in (133, 134, 143, 244, 334, 343, 344, 144) then 'slipping away, cannot lose' -- (Big spenders who havenâ€™t purchased lately) slipping away
 		when rfm_cell_string in (311, 411, 331) then 'new customers'
 		when rfm_cell_string in (222, 223, 233, 322) then 'potential churners'
 		when rfm_cell_string in (323, 333,321, 422, 332, 432) then 'active' --(Customers who buy often & recently, but at low price points)
